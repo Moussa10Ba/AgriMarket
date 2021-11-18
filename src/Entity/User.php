@@ -71,6 +71,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $statut;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Profil::class, inversedBy="Users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $profil;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -240,6 +246,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setStatut(bool $statut): self
     {
         $this->statut = $statut;
+
+        return $this;
+    }
+
+    public function getProfil(): ?Profil
+    {
+        return $this->profil;
+    }
+
+    public function setProfil(?Profil $profil): self
+    {
+        $this->profil = $profil;
 
         return $this;
     }
