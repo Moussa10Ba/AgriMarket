@@ -2,14 +2,22 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\UserRepository;
+use Doctrine\ORM\Mapping\InheritanceType;
+use Doctrine\ORM\Mapping\DiscriminatorMap;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\ORM\Mapping\DiscriminatorColumn;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
+ * @ApiResource()
+ * @ORM\InheritanceType("JOINED")
+ * @DiscriminatorColumn(name="discr", type="string")
+ * @DiscriminatorMap({"user" = "User", "acheteur" = "Acheteur", "vendeur"="Vendeur", "admin"="Admin"})
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -119,7 +127,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = 'ROLE_'.$this->profil->getLibelle();
 
         return array_unique($roles);
     }
@@ -204,7 +212,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getPhoto()
     {
-        return $this->photo;
+        if($this->photo)
+        {
+            $stream= stream_get_contents($this->photo);
+            return  base64_encode ($stream) ;
+        }
+
+        return null;
     }
 
     public function setPhoto($photo): self

@@ -55,6 +55,11 @@ class Commande
      */
     private $facture;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Acheteur::class, inversedBy="commandes")
+     */
+    private $acheteur;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -150,6 +155,18 @@ class Commande
         }
 
         $this->facture = $facture;
+
+        return $this;
+    }
+
+    public function getAcheteur(): ?Acheteur
+    {
+        return $this->acheteur;
+    }
+
+    public function setAcheteur(?Acheteur $acheteur): self
+    {
+        $this->acheteur = $acheteur;
 
         return $this;
     }
