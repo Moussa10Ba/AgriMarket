@@ -2,14 +2,32 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\ProfilRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProfilRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *  denormalizationContext={"groups"={"profilWrite"}},
+ *  normalizationContext={"groups"={"profilRead"}},
+ * routePrefix="/admin",
+ *  attributes={
+ *      "pagination_items_per_page"=10,
+ *      "security"="is_granted('ROLE_ADMIN')",
+ *      "security_message"="Vous n'avez pas acces à cette ressource"
+ * },
+ *  itemOperations={
+ *  "get","put","delete",
+ * },
+ * collectionOperations={
+ *  "get","post",
+ * },
+ * )
  * @ORM\Entity(repositoryClass=ProfilRepository::class)
  */
 class Profil
@@ -18,21 +36,27 @@ class Profil
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("profilRead")
+     * @Groups("profilWrite")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank;
+     * @Groups({"profilRead","profilWrite", "userWrite"})
      */
     private $libelle;
 
     /**
-     * @ORM\OneToMany(targetEntity=User::class, mappedBy="profil")
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="profil",cascade={"persist"})
+     * @ApiSubresource()
      */
     private $Users;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"profilRead","profilWrite", "userWrite"})
      */
     private $isArchived;
 
