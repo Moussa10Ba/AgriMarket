@@ -28,11 +28,13 @@ class Vendeur extends User
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"vendeurWrite","vendeurRead"})
+     * @Groups({"produitRead"})
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
      */
     private $adresseChamps;
 

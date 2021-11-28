@@ -43,6 +43,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"userRead"})
+     * @Groups({"produitRead"})
      */
     protected $id;
 

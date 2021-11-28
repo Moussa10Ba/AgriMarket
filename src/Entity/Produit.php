@@ -2,14 +2,18 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\ProduitRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProduitRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ * normalizationContext = {"groups"={"produitRead"}},
+ * denormalizationContext = {"groups"={"produitWrite"}}
+ * )
  * @ORM\Entity(repositoryClass=ProduitRepository::class)
  */
 class Produit
@@ -18,43 +22,51 @@ class Produit
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"produitRead"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"produitRead","produitWrite"})
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"produitRead","produitWrite"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"produitRead","produitWrite"})
      */
     private $paysDorigine;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"produitRead","produitWrite"})
      */
     private $prixKg;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"produitRead","produitWrite"})
      */
     private $quantite;
 
     /**
      * @ORM\ManyToOne(targetEntity=Categorie::class, inversedBy="produits")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"produitWrite"})
      */
     private $categorie;
 
     /**
      * @ORM\ManyToOne(targetEntity=Vendeur::class, inversedBy="produits")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"produitRead","produitWrite"})
      */
     private $vendeur;
 
