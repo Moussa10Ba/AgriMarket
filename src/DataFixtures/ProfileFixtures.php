@@ -8,14 +8,16 @@ use Doctrine\Persistence\ObjectManager;
 
 class ProfileFixtures extends Fixture
 {
-    public const PROFIL_ADMIN_REFERENCE = 'profil_admin';
+    
+    public CONST PROFIL_ADMIN_REFERENCE = 'profil_admin';
     public const PROFIL_ACHETEUR_REFERENCE = 'profil_acheteur';
     public const PROFIL_VENDEUR_REFERENCE = 'profil_vendeur';
+    
+    
     public function load(ObjectManager $manager): void
     {
         // $product = new Product();
         // $manager->persist($product);
-        $tab = ["Admin", "Acheteur", "Vendeur"];
         for ($i=1; $i <4 ; $i++) { 
             $profil = new Profil();
             if ($i==1) {

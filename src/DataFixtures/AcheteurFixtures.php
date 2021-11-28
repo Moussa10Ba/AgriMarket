@@ -36,14 +36,13 @@ class AcheteurFixtures extends Fixture implements DependentFixtureInterface
             $acheteur = new Acheteur();
             $password =$this->encode->hashPassword($acheteur,"passer");
             $acheteur->setPassword($password);
-            $profil = new Profil();
             $acheteur->setNom($faker->lastName);
             $acheteur->setPrenom($faker->firstNameMale);
             $acheteur->setEmail($faker->email);
             $acheteur->setProfil($this->getReference(ProfileFixtures::PROFIL_ACHETEUR_REFERENCE));
             $acheteur->setTelephone($tabTel[$i]);
             $acheteur->setProfession("Entrepreneur");
-            $acheteur->setAdresse($ville[$i]."adresse");
+            $acheteur->setAdresse($ville[$i]);
             $acheteur->setVille($ville[$i]);
             $acheteur->setStatut(true);
             $acheteur->setPhoto($faker->randomElement($tabphoto));

@@ -37,7 +37,6 @@ class Profil
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups("profilRead")
-     * @Groups("profilWrite")
      */
     private $id;
 
