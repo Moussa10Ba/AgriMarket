@@ -6,13 +6,45 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CategorieRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
  * normalizationContext = {"groups"={"categorieRead"}},
- * denormalizationContext = {"groups"={"categorieWrite"}}
+ * denormalizationContext = {"groups"={"categorieWrite"}},
+ *          itemOperations = {
+ *              "getCategorie" = {
+ *                     "method" = "get",
+ *                     "path" = "categories/{id}",
+ *                     "security"="is_granted('ROLE_Admin')",
+ *                     "security_message" = "Contacter L'administrateur du site ",
+ *                  },
+ *                    
+ *                  "getProduitsByCategorie" = {
+ *                          "method" = "get",
+ *                          "path"="categorie/{id}/produits",
+ *                          "controller"="App\Controller\CategorieController::getProduitsByCategorie",      
+ *                      },
+ *                      "put" = {
+ *                          "security"="is_granted('ROLE_Admin')",
+ *                           "security_message" = "Contacter L'administrateur du site ",
+ *                              },
+ *                  },
+ *           collectionOperations = {
+ *                      "post" = {
+ *                          "security"="is_granted('ROLE_Admin')",
+ *                           "security_message" = "Contacter L'administrateur du site ",
+ *                      },
+ *                       "getœ" = {
+ *                          "security"="is_granted('ROLE_Admin')",
+ *                          "security_message" = "Contacter L'administrateur du site ",
+ *                      },
+ *                     
+ * 
+ *                      }
+ *  
  * )
  * @ORM\Entity(repositoryClass=CategorieRepository::class)
  */
@@ -34,6 +66,7 @@ class Categorie
 
     /**
      * @ORM\OneToMany(targetEntity=Produit::class, mappedBy="categorie")
+     * @ApiSubresource()
      */
     private $produits;
 
