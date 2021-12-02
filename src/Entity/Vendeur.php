@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\VendeurRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -15,8 +16,26 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *  normalizationContext={"groups"={"vendeurRead"}},
  *  denormalizationContext={"groups"={"vendeurWrite"}},
  *  itemOperations = {
- * "get","put","delete",
+ * "get"= {
+ *  "security"="is_granted('VIEW',object)",
+ *     "security_message"="Acces Denied",
  * },
+ * "put" = {
+ * "security"="is_granted('VIEW',object)",
+ *     "security_message"="Acces Denied",
+ * },
+ * "delete" = {
+ * "security"="is_granted('DELETE_',object)",
+ *     "security_message"="Acces Denied",
+ * },
+ * },
+ * collectionOperations = {
+ *     "get"={
+ *      "security"="is_granted('VIEW',object)",
+ *      "security_message"="Acces Denied",
+ * }
+ * ,"post"
+ *  },
  * )
  * @ORM\Entity(repositoryClass=VendeurRepository::class)
 
@@ -45,6 +64,7 @@ class Vendeur extends User
 
     /**
      * @ORM\OneToMany(targetEntity=Produit::class, mappedBy="vendeur")
+     * @ApiSubresource()
      */
     private $produits;
 
